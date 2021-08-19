@@ -1,21 +1,10 @@
-var express = require('express');
-var exphbs  = require('express-handlebars');
-var path = require('path');
+const env = process.env.NODE_ENV || 'development';
+const mongoose = require('mongoose');
+const config = require('./config/config')[env];
+const app = require('express')();
 
-var app = express();
+require('./config/express')(app);
+require('./config/routes')(app);
 
-app.engine('hbs', exphbs({ 
-    extname: "hbs",
-    defaultLayout: "",
-    //layout of the page is in a folder in /views
-    layoutsDir: path.join(__dirname + "./views"),
-    partialsDir: path.join(__dirname + "/views") 
-    })
-);
-app.set('view engine', 'hbs');
 
-app.get('/', function (req, res) {
-    res.render('guest-home');
-});
-
-app.listen(3660);
+app.listen(config.port, console.log(`Now listening on port ${config.port}`));
