@@ -1,35 +1,28 @@
-const renderHome = require('../controllers/renderControllers/renderHome');
-const userHome = require('../controllers/renderControllers/renderUserHome');
-const renderLogin = require('../controllers/renderControllers/renderLogin.js');
-const renderRegister = require('../controllers/renderControllers/renderRegister');
-const renderDetails = require('../controllers/renderControllers/renderDetails');
-const renderCreateCourse = require('../controllers/renderControllers/renderCreateCourse');
-const renderEditCourse = require('../controllers/renderControllers/renderEditCourse');
+const getController = require('../controllers/getController');
+const postController = require('../controllers/postController');
 
 
-const postRegister = require('../controllers/postControllers/postRegister');
-const postLogin = require('../controllers/postControllers/postLogin');
 
 module.exports = (app) => {
 
-    app.get('/', renderHome);
+    app.get('/', getController.getGuestHome);
 
-    app.get('/userHome', userHome);
+    app.get('/userHome', getController.getUserHome);
 
-    app.get('/login', renderLogin);
+    app.get('/login', getController.getLogin);
 
-    app.get('/register', renderRegister);
+    app.get('/register', getController.getRegister);
 
     //add id to href
-    app.get('/courseDetails', renderDetails);
+    app.get('/courseDetails', getController.getCourseDetails);
 
-    app.get('/course/create', renderCreateCourse);
+    app.get('/course/create', getController.getCreateCourse);
 
-    app.get('/course/edit', renderEditCourse);
+    app.get('/course/edit', getController.getEditCourse);
 
 
-    app.post('/register', postRegister);
+    app.post('/register', postController.postRegister);
 
-    app.post('/login', postLogin);
+    app.post('/login', postController.postLogin);
 
 };
