@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Express Retake Exam January 2019</title>
+    <title>Language Video Tutorials</title>
     <link href="../static/css/site.css" type="text/css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand">Video Tutorials</a>
+            <a class="navbar-brand">Learning starts now...</a>
 
             <ul class="navbar-nav ml-auto">
 
@@ -53,16 +53,37 @@
                     <input type="submit" class="btn btn-info" value="Search">
                 </form>
             </section>
-
+            
             <div class="container mt-3">
+                <div class="row ">
+                    <div class="card-deck d-flex justify-content-center">
+                        {{#each courses}}
+                        <div class="card mb-4">
+                            <img class="card-img-top"
+                                src="{{imageUrl}}"
+                                alt="Card image cap" width="400">
+                            <div class="card-body">
+                                <h4 class="card-title">{{title}}</h4>
+                            </div>
+                            <div class="card-footer">
+                                <a href="/courseDetails/{{_id}}"><button type="button" class="btn btn-info">Details</button></a>
+                                <small class="float-right">{{created}}</small>
+                            </div>
+                        </div>
+                        {{/each}}
+                    </div>
+                </div>
+            </div>
+            
+            {{!-- <div class="container mt-3">
                 <div class="row ">
                     <div class="card-deck d-flex justify-content-center">
                         <div class="card mb-4">
                             <img class="card-img-top"
-                                src="https://blog.cyberpanel.net/wp-content/uploads/2019/03/express-js-cyberpanel.jpeg"
+                                src="https://www.countryflags.com/wp-content/uploads/united-states-of-america-flag-png-large.png"
                                 alt="Card image cap" width="400">
                             <div class="card-body">
-                                <h4 class="card-title">ExpressJS</h4>
+                                <h4 class="card-title">English</h4>
                             </div>
                             <div class="card-footer">
                                 <a href="/courseDetails"><button type="button" class="btn btn-info">Details</button></a>
@@ -72,10 +93,10 @@
 
                         <div class="card mb-4">
                             <img class="card-img-top"
-                                src="https://colorlib.com/wp/wp-content/uploads/sites/2/angular-logo.png"
+                                src="https://www.countryflags.com/wp-content/uploads/japan-flag-png-large.png"
                                 alt="Card image cap" width="400">
                             <div class="card-body">
-                                <h4 class="card-title">Angular</h4>
+                                <h4 class="card-title">Japanese</h4>
                             </div>
                             <div class="card-footer">
                                 <a href="/courseDetails"><button type="button" class="btn btn-info">Details</button></a>
@@ -85,10 +106,10 @@
 
                         <div class="card mb-4">
                             <img class="card-img-top"
-                                src="http://blog.addthiscdn.com/wp-content/uploads/2014/11/addthis-react-flux-javascript-scaling.png"
+                                src="https://www.countryflags.com/wp-content/uploads/france-flag-png-large.png"
                                 alt="Card image cap" width="400">
                             <div class="card-body">
-                                <h4 class="card-title">React</h4>
+                                <h4 class="card-title">French</h4>
                             </div>
                             <div class="card-footer">
                                 <a href="/courseDetails"><button type="button" class="btn btn-info">Details</button></a>
@@ -97,13 +118,17 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+
+            
+            {{#unless courses}}
             <h3 class="text-center">No courses...</h3>
+            {{/unless}}
         </main>
 
         <footer class="page-footer font-small">
-            <div class="footer-copyright text-center py-3">© 2019
-                <a href="#/">Express Fundamentals</a>
+            <div class="footer-copyright text-center py-3">© 2021
+                <a href="#/">Language Learning Center</a>
             </div>
         </footer>
 

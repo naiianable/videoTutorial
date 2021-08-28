@@ -1,4 +1,4 @@
-
+const Course = require('../Models/Course');
 
 exports.getGuestHome = function(req, res) {
     res.render('guest-home');
@@ -7,7 +7,12 @@ exports.getGuestHome = function(req, res) {
 //<========================================================================>
 
 exports.getUserHome = function(req, res) {
-    res.render('user-home');
+
+    Course.find((err, courses) => {
+        console.log(courses);
+        res.render('user-home', { courses })
+    }).lean();
+    
 };
 
 //<========================================================================>
@@ -18,11 +23,13 @@ exports.getCreateCourse = function(req, res) {
 
 //<========================================================================>
 
-exports.getCourseDetails = function(req, res) {
-    //UPDATE ROUTE FOR COURSE IN DB
-    //let courseId = req.params.id;
-    //console.log(req)
-    res.render('course-details');
+exports.getCourseDetails = async function(req, res) {
+    // UPDATE ROUTE FOR COURSE IN DB
+    let courseId = req.params.id;
+    let courseData = await Course.findById(courseId).lean();
+
+    console.log(courseData)
+    res.render('courseDetails', { courseData });
 };
 
 //<========================================================================>

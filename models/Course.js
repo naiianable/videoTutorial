@@ -18,7 +18,16 @@ let newCourse = new Schema({
         type: String,
         required: true
     },
-    users: [{ type: Schema.Types.Objectid, ref: 'User' }]
+    isPublic: {
+        type: Boolean,
+        default: false
+    },
+    created: {
+        type: Date,
+        default: Date.now,
+        required: true
+    },
+    users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
 });
 
 let Course = mongoose.model('Course', newCourse);

@@ -12,7 +12,7 @@
 <body>
     <div class="container">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand">Video Tutorials</a>
+            <a class="navbar-brand">Learning starts now...</a>
 
             <ul class="navbar-nav ml-auto">
 
@@ -48,21 +48,22 @@
         </section>
 
         <main>
+            {{#with courseData}}
             <div class="container">
-                <h1 class="my-4">Course title : ExpressJS
+                <h1 class="my-4">Course Title : {{title}}
                 </h1>
 
                 <div class="row">
 
                     <div class="col-md-8">
                         <img class="img-fluid"
-                            src="https://blog.cyberpanel.net/wp-content/uploads/2019/03/express-js-cyberpanel.jpeg"
-                            alt="Express" />
+                            src="{{imageUrl}}"
+                            alt="{{title}}" />
                     </div>
 
                     <div class="col-md-4 text-center">
                         <h3 class="my-3">Course Description</h3>
-                        <p>ExpressJS is ...</p>
+                        <p>{{description}}</p>
 
                         <a class="btn btn-danger" href="/">Delete</a>
                         <a class="btn btn-warning" href="/course/edit">Edit</a>
@@ -72,11 +73,12 @@
                     </div>
                 </div>
             </div>
+            {{/with}}
         </main>
 
         <footer class="page-footer font-small">
-            <div class="footer-copyright text-center py-3">© 2019
-                <a href="#/">Express Fundamentals</a>
+            <div class="footer-copyright text-center py-3">© 2021
+                <a href="#/">Language Learning Center</a>
             </div>
         </footer>
 
