@@ -1,6 +1,7 @@
 const User = require('../Models/User');
 const Course = require('../Models/Course');
 const bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
 exports.postRegister = function(req, res) {
 
@@ -9,25 +10,62 @@ exports.postRegister = function(req, res) {
 
     const saltRounds = 9;
     const myPlainTextPass = userData.password;
-    console.log(newUser);
 
-    bcrypt.hash(myPlainTextPass, saltRounds, function(err, hash) {
+
+    if(myPlainTextPass == userData.repeatPassword) {
+       bcrypt.hash(myPlainTextPass, saltRounds, function(err, hash) {
         newUser.password = hash;
         newUser.save((err, user) => {
             if(err) return console.error(err);
         });
-        console.log(hash);
+        console.log(newUser);
     });
-    res.redirect('user-home');
+    res.redirect('userHome'); 
+    } else {
+        console.log('TRY AGAIN');
+        res.redirect('register');
+    }
+    
 };
 
 
-exports.postLogin = function(req, res) {
+//<========================================================================>
 
-    //ADD IN FUNCTIONALITY AFTER DB IS CONNECTED
-    console.log('LOGIN POST');
-    res.redirect('userHome');
+
+
+exports.postLogin = async function(req, res) {
+
+    let userInput = req.body;
+    let userData = await User.findOne({ username: userInput.username });
+    let textPass = userInput.password;
+    let hashPass = userData.password;
+
+    bcrypt.compare(textPass, hashPass).then((result) => {
+        let userId = userData._id;
+        let userName = userData.username;
+        let userPass = userData.password;
+        if(result) {
+            let payload = ({ userId, userPass });
+            let secretKey = process.env.SECRET;
+            let options = { expiresIn: '1hr' };
+
+            let token = jwt.sign(payload, secretKey, options);
+            console.log(token);
+
+            res.cookie('token', token);
+            res.cookie('loggedIn', true);
+            res.cookie('user', userName);
+
+            res.redirect('userHome');
+        }
+    }).catch((err) => {
+        console.log(err);
+    });
+    console.log(userData);
+    
 };
+
+
 //<========================================================================>
 
 
@@ -42,7 +80,7 @@ exports.postCreateCourse = function(req, res) {
     });
 
     console.log(newCourse);
-    res.redirect('/user-home');
+    res.redirect('/userHome');
 };
 
 
@@ -50,4 +88,27 @@ exports.postCreateCourse = function(req, res) {
 //<========================================================================>
 
 
+exports.postEditCourse = async function(req, res) {
 
+    let courseId = req.params.id;
+    let courseData = req.body;
+
+    let editThisCourse = await Course.findById(courseId);
+    console.log('ORIGINAL COURSE', editThisCourse);
+    if(courseData.title !== '') {
+        editThisCourse.title = courseData.title;
+    }
+    if(courseData.description !== '') {
+        editThisCourse.description = courseData.description;
+    }
+    if(courseData.imageUrl !== '') {
+        editThisCourse.imageUrl = courseData.imageUrl;
+    }
+
+    editThisCourse.save((err, course) => {
+        if(err) return console.error(err);
+    });
+    
+    console.log('UPDATED COUSE', editThisCourse);
+    res.redirect('userHome')
+};

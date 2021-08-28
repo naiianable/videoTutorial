@@ -18,7 +18,7 @@ module.exports = (app) => {
 
     app.get('/course/create', getController.getCreateCourse);
 
-    app.get('/course/edit', getController.getEditCourse);
+    app.get('/course/edit/:id', getController.getEditCourse);
 
 
     app.post('/register', postController.postRegister);
@@ -26,5 +26,7 @@ module.exports = (app) => {
     app.post('/login', postController.postLogin);
 
     app.post('/course/create', postController.postCreateCourse);
+
+    app.post('/course/edit/:id', postController.postEditCourse);
 
 };

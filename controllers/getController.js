@@ -1,7 +1,7 @@
 const Course = require('../Models/Course');
 
 exports.getGuestHome = function(req, res) {
-    res.render('guest-home');
+    res.render('guestHome');
 };
 
 //<========================================================================>
@@ -9,8 +9,9 @@ exports.getGuestHome = function(req, res) {
 exports.getUserHome = function(req, res) {
 
     Course.find((err, courses) => {
-        console.log(courses);
-        res.render('user-home', { courses })
+        let loggedIn = req.cookies.loggedIn;
+        let user = req.cookies.user;
+        res.render('userHome', { courses, loggedIn, user });
     }).lean();
     
 };
@@ -18,7 +19,7 @@ exports.getUserHome = function(req, res) {
 //<========================================================================>
 
 exports.getCreateCourse = function(req, res) {
-    res.render('create-course');
+    res.render('createCourse');
 };
 
 //<========================================================================>
@@ -34,10 +35,13 @@ exports.getCourseDetails = async function(req, res) {
 
 //<========================================================================>
 
-exports.getEditCourse = function(req, res) {
+exports.getEditCourse = async function(req, res) {
     //UPDATE ROUTE FOR COURSE IN DB
+    let courseId = req.params.id;
+    let courseData = await Course.findById(courseId).lean();
+    console.log(courseData)
 
-    res.render('edit-course');
+    res.render('editCourse', { courseData });
 };
 
 //<========================================================================>
