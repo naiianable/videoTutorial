@@ -28,7 +28,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Logout</a>
+                    <a class="nav-link" href="/logout">Logout</a>
                 </li>
                 {{else}}
                 <li class="nav-item">
@@ -47,6 +47,17 @@
         </section>
 
         <main>
+            
+            
+            {{#unless loggedIn}}
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container">
+                    <h1 class="display-4">Language Tutorials</h1>
+                    <p class="lead">Start Self-Study Today: It'll Change Your Life</p>
+                </div>
+            </div>
+            <h1 class="text-center">Top Courses</h1>
+            {{else}}
             <h1 class="text-center">Courses</h1>
             <section>
                 <a href="/course/create" class="btn btn-warning ">Create Course</a>
@@ -56,11 +67,13 @@
                     <input type="submit" class="btn btn-info" value="Search">
                 </form>
             </section>
+            {{/unless}}
             
             <div class="container mt-3">
                 <div class="row ">
                     <div class="card-deck d-flex justify-content-center">
-                        {{#each courses}}
+                        {{#if loggedIn}}
+                        {{#each courses}}  
                         <div class="card mb-4">
                             <img class="card-img-top"
                                 src="{{imageUrl}}"
@@ -69,15 +82,32 @@
                                 <h4 class="card-title">{{title}}</h4>
                             </div>
                             <div class="card-footer">
-                                <a href="/courseDetails/{{_id}}"><button type="button" class="btn btn-info">Details</button></a>
-                                <small class="float-right">{{created}}</small>
+                                
+                                <a href="/courseDetails/{{_id}}"><button type="button" class="btn btn-info">Details</button></a>  
+                                <small class="float-right">{{created}}</small>                               
                             </div>
                         </div>
                         {{/each}}
-                    </div>
+                        {{/if}}     
+
+
+                        {{#unless loggedIn}}
+                        {{#each courses}}           
+                            <div class="card mb-4">
+                                <img class="card-img-top"
+                                    src="{{imageUrl}}"
+                                    alt="Card image cap" width="400">
+                                <div class="card-body">
+                                    <h4 class="card-title">{{title}}</h4>
+                                </div>
+                            </div>
+                        {{/each}}
+                        {{/unless}} 
+                    </div>          
                 </div>
             </div>
             
+                        
             {{!-- <div class="container mt-3">
                 <div class="row ">
                     <div class="card-deck d-flex justify-content-center">

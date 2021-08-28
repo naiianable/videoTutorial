@@ -20,7 +20,7 @@ exports.postRegister = function(req, res) {
         });
         console.log(newUser);
     });
-    res.redirect('userHome'); 
+    res.redirect('/'); 
     } else {
         console.log('TRY AGAIN');
         res.redirect('register');
@@ -56,7 +56,7 @@ exports.postLogin = async function(req, res) {
             res.cookie('loggedIn', true);
             res.cookie('user', userName);
 
-            res.redirect('userHome');
+            res.redirect('/');
         }
     }).catch((err) => {
         console.log(err);
@@ -80,7 +80,7 @@ exports.postCreateCourse = function(req, res) {
     });
 
     console.log(newCourse);
-    res.redirect('/userHome');
+    res.redirect('/');
 };
 
 
@@ -110,5 +110,11 @@ exports.postEditCourse = async function(req, res) {
     });
     
     console.log('UPDATED COUSE', editThisCourse);
-    res.redirect('userHome')
+    res.redirect('/');
 };
+
+
+
+//<========================================================================>
+
+

@@ -1,13 +1,11 @@
 const getController = require('../controllers/getController');
 const postController = require('../controllers/postController');
 
-
+const logout = require('../middleware/logout');
 
 module.exports = (app) => {
 
-    app.get('/', getController.getGuestHome);
-
-    app.get('/userHome', getController.getUserHome);
+    app.get('/', getController.getUserHome);
 
     app.get('/login', getController.getLogin);
 
@@ -19,6 +17,8 @@ module.exports = (app) => {
     app.get('/course/create', getController.getCreateCourse);
 
     app.get('/course/edit/:id', getController.getEditCourse);
+
+    app.get('/logout', logout);
 
 
     app.post('/register', postController.postRegister);
