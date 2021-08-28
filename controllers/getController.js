@@ -11,7 +11,8 @@ exports.getUserHome = function(req, res) {
     Course.find((err, courses) => {
         let loggedIn = req.cookies.loggedIn;
         let user = req.cookies.user;
-        res.render('userHome', { courses, loggedIn, user });
+        console.log(courses)
+        res.render('home', { courses, loggedIn, user });
     }).lean();
     
 };
@@ -19,29 +20,31 @@ exports.getUserHome = function(req, res) {
 //<========================================================================>
 
 exports.getCreateCourse = function(req, res) {
-    res.render('createCourse');
+    let user = req.cookies.user;
+    res.render('createCourse', { user });
 };
 
 //<========================================================================>
 
 exports.getCourseDetails = async function(req, res) {
-    // UPDATE ROUTE FOR COURSE IN DB
+    let loggedIn = req.cookies.loggedIn;
+    let user = req.cookies.user;
     let courseId = req.params.id;
     let courseData = await Course.findById(courseId).lean();
 
     console.log(courseData)
-    res.render('courseDetails', { courseData });
+    res.render('courseDetails', { courseData, loggedIn, user });
 };
 
 //<========================================================================>
 
 exports.getEditCourse = async function(req, res) {
-    //UPDATE ROUTE FOR COURSE IN DB
+    let loggedIn = req.cookies.loggedIn;
+    let user = req.cookies.user;
     let courseId = req.params.id;
     let courseData = await Course.findById(courseId).lean();
-    console.log(courseData)
 
-    res.render('editCourse', { courseData });
+    res.render('editCourse', { courseData, loggedIn, user });
 };
 
 //<========================================================================>
