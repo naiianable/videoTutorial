@@ -1,6 +1,3 @@
-// • Username - string (required), unique
-// • Password - string (required)
-// • Enrolled Courses - a collection of Courses
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

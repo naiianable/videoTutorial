@@ -14,7 +14,7 @@ module.exports = (app) => {
     app.get('/register', getController.getRegister);
 
     //add id to href
-    app.get('/courseDetails', getController.getCourseDetails);
+    app.get('/courseDetails/:id', getController.getCourseDetails);
 
     app.get('/course/create', getController.getCreateCourse);
 
@@ -24,5 +24,7 @@ module.exports = (app) => {
     app.post('/register', postController.postRegister);
 
     app.post('/login', postController.postLogin);
+
+    app.post('/course/create', postController.postCreateCourse);
 
 };
