@@ -67,13 +67,16 @@
 
                         <a class="btn btn-danger" href="/">Delete</a>
                         <a class="btn btn-warning" href="/course/edit/{{_id}}">Edit</a>
+                    {{/with}}    
+                        {{#if registered}}
                         <span class="enrolled-span">You are already enrolled</span>
-                        <a class="btn btn-primary" href="/">Enroll</a>
+                        {{/if}}
+                        <a class="btn btn-primary" href="/enroll">Enroll</a>
 
                     </div>
                 </div>
             </div>
-            {{/with}}
+            
         </main>
 
         <footer class="page-footer font-small">

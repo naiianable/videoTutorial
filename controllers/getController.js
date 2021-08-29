@@ -1,17 +1,14 @@
 const Course = require('../Models/Course');
+const User = require('../Models/User');
+const jwt = require('jsonwebtoken');
 
-exports.getGuestHome = function(req, res) {
-    res.render('guestHome');
-};
 
-//<========================================================================>
-
-exports.getUserHome = function(req, res) {
+exports.getHome = function(req, res) {
 
     Course.find((err, courses) => {
         let loggedIn = req.cookies.loggedIn;
         let user = req.cookies.user;
-        console.log(courses)
+        //console.log(courses)
         res.render('home', { courses, loggedIn, user });
     }).lean();
     
@@ -32,8 +29,21 @@ exports.getCourseDetails = async function(req, res) {
     let courseId = req.params.id;
     let courseData = await Course.findById(courseId).lean();
 
-    console.log(courseData)
-    res.render('courseDetails', { courseData, loggedIn, user });
+    let token = req.cookies.token;
+    var decoded = jwt.verify(token, process.env.SECRET);
+    let userData = await User.findById(decoded.userId);
+    let courses = userData.courses;
+    let registered = courses.includes(courseId);
+
+    if(!courses.includes(courseId)) {
+        console.log('not signed up');
+    } else {
+        console.log('signed up already')
+    }
+
+    console.log(registered)
+    res.cookie('course', courseId);
+    res.render('courseDetails', { courseData, loggedIn, user, registered });
 };
 
 //<========================================================================>
