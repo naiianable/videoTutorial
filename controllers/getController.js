@@ -3,15 +3,31 @@ const User = require('../Models/User');
 const jwt = require('jsonwebtoken');
 
 
-exports.getHome = function(req, res) {
-
-    Course.find((err, courses) => {
-        let loggedIn = req.cookies.loggedIn;
-        let user = req.cookies.user;
-        //console.log(courses)
-        res.render('home', { courses, loggedIn, user });
-    }).lean();
+exports.getHome = async function(req, res) {
+    let loggedIn = req.cookies.loggedIn;
+    let user = req.cookies.user;
     
+    let courses = await Course.find().lean();
+    let topCourses = [];
+
+    //sorting for top 3 courses
+    let sortedFaveCourses = courses.sort((a,b) => {
+        return b.users.length - a.users.length;
+    });
+    //pushing top 3 into array
+    for(let i = 0; i < 3; i++) {
+        topCourses.push(sortedFaveCourses[i]);
+    }
+    //sorting for most recent to least recent
+    let sortedCreatedCourses = courses.sort((a,b) => {
+        return b.created - a.created;        
+    });
+
+    //console.log(sortedCreatedCourses);
+    //  console.log('TOP 3 COURSES', topCourses);
+    
+    
+    res.render('home', { sortedCreatedCourses, topCourses, loggedIn, user });
 };
 
 //<========================================================================>
@@ -35,13 +51,6 @@ exports.getCourseDetails = async function(req, res) {
     let courses = userData.courses;
     let registered = courses.includes(courseId);
 
-    if(!courses.includes(courseId)) {
-        console.log('not signed up');
-    } else {
-        console.log('signed up already')
-    }
-
-    console.log(registered)
     res.cookie('course', courseId);
     res.render('courseDetails', { courseData, loggedIn, user, registered });
 };

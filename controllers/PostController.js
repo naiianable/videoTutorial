@@ -20,7 +20,7 @@ exports.postRegister = function(req, res) {
         });
         console.log(newUser);
     });
-    res.redirect('/'); 
+    res.redirect('/login'); 
     } else {
         console.log('TRY AGAIN');
         res.redirect('register');
