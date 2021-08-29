@@ -73,7 +73,7 @@
                 <div class="row ">
                     <div class="card-deck d-flex justify-content-center">
                         {{#if loggedIn}}
-                        {{#each courses}}  
+                        {{#each sortedCreatedCourses}}  
                         <div class="card mb-4">
                             <img class="card-img-top"
                                 src="{{imageUrl}}"
@@ -92,7 +92,7 @@
 
 
                         {{#unless loggedIn}}
-                        {{#each courses}}           
+                        {{#each topCourses}}           
                             <div class="card mb-4">
                                 <img class="card-img-top"
                                     src="{{imageUrl}}"

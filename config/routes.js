@@ -1,7 +1,7 @@
 const getController = require('../controllers/getController');
 const postController = require('../controllers/postController');
 
-const logout = require('../middleware/logout');
+const logout = require('../controllers/logout');
 const enroll = require('../controllers/enroll');
 const clearCookie = require('../middleware/clearCookie');
 
