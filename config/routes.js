@@ -2,10 +2,12 @@ const getController = require('../controllers/getController');
 const postController = require('../controllers/postController');
 
 const logout = require('../middleware/logout');
+const enroll = require('../controllers/enroll');
+const clearCookie = require('../middleware/clearCookie');
 
 module.exports = (app) => {
 
-    app.get('/', getController.getUserHome);
+    app.get('/', clearCookie, getController.getHome);
 
     app.get('/login', getController.getLogin);
 
@@ -19,6 +21,8 @@ module.exports = (app) => {
     app.get('/course/edit/:id', getController.getEditCourse);
 
     app.get('/logout', logout);
+
+    app.get('/enroll', enroll);
 
 
     app.post('/register', postController.postRegister);

@@ -50,7 +50,6 @@ exports.postLogin = async function(req, res) {
             let options = { expiresIn: '1hr' };
 
             let token = jwt.sign(payload, secretKey, options);
-            console.log(token);
 
             res.cookie('token', token);
             res.cookie('loggedIn', true);
@@ -61,7 +60,6 @@ exports.postLogin = async function(req, res) {
     }).catch((err) => {
         console.log(err);
     });
-    console.log(userData);
     
 };
 
@@ -86,6 +84,8 @@ exports.postCreateCourse = function(req, res) {
 
 
 //<========================================================================>
+
+
 
 
 exports.postEditCourse = async function(req, res) {
