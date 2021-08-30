@@ -56,8 +56,9 @@
                     <p class="lead">Start Self-Study Today: It'll Change Your Life</p>
                 </div>
             </div>
-            <h1 class="text-center">Top Courses</h1>
-            {{else}}
+            {{/unless}}
+            
+            {{#if loggedIn}}
             <h1 class="text-center">Courses</h1>
             <section>
                 <a href="/course/create" class="btn btn-warning ">Create Course</a>
@@ -67,8 +68,13 @@
                     <input type="submit" class="btn btn-info" value="Search">
                 </form>
             </section>
+            {{/if}}
+
+            {{#unless loggedIn}}
+            {{#if noTopCourses}}
+            <h1 class="text-center">Top Courses</h1>
+            {{/if}}
             {{/unless}}
-            
             <div class="container mt-3">
                 <div class="row ">
                     <div class="card-deck d-flex justify-content-center">
