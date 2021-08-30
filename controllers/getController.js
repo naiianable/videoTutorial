@@ -21,23 +21,20 @@ exports.getHome = async function(req, res) {
     }
 
     let topCourses = sortedTop.filter(temp => temp != undefined);
-    let noTopCourses;
-    if(topCourses.length == 0) {
-        noTopCourses = true;
-    }
-
+    let noTopCourses = topCourses.includes();
+    
     //sorting for most recent to least recent
     let sortedCreatedCourses = courses.sort((a,b) => {
         return b.created - a.created;        
     });
 
-    console.log('THIS IS COURSES', courses);
-    console.log('THIS IS SORTED TOP', topCourses);
-    console.log('THIS IS SORTED CREATED', sortedCreatedCourses)
-    console.log(noTopCourses)
+    // console.log('THIS IS COURSES', courses);
+    // console.log('THIS IS SORTED TOP', topCourses);
+    // console.log('THIS IS SORTED CREATED', sortedCreatedCourses)
+    // console.log(noTopCourses)
     
     
-    res.render('home', { courses, sortedCreatedCourses, topCourses, loggedIn, user });
+    res.render('home', { courses, sortedCreatedCourses, topCourses, loggedIn, user, noTopCourses });
 };
 
 //<========================================================================>
