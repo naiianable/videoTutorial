@@ -51,8 +51,8 @@ exports.postLogin = async function(req, res) {
 
             let token = jwt.sign(payload, secretKey, options);
 
-            res.cookie('token', token);
-            res.cookie('loggedIn', true);
+            res.cookie('token', token, { httpOnly: true, maxAge: 3600 * 1000 });
+            res.cookie('loggedIn', true, { maxAge: 3600 * 1000 });
             res.cookie('user', userName);
 
             res.redirect('/');
@@ -72,12 +72,16 @@ exports.postCreateCourse = function(req, res) {
     
     let newCourseData = req.body;
     let newCourse = new Course(newCourseData);
-
+    let token = req.cookies.token;
+    let decoded = jwt.verify(token, process.env.SECRET);
+    
+    newCourse.creator = decoded.userId;
     newCourse.save((err, course) => {
         if(err) return console.error(err);
     });
 
     console.log(newCourse);
+    console.log(decoded)
     res.redirect('/');
 };
 

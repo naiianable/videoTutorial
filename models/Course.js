@@ -27,7 +27,8 @@ let newCourse = new Schema({
         default: Date.now,
         required: true
     },
-    users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    users: [{ type: Schema.Types.ObjectId, ref: 'User' }],
+    creator: { type: Schema.Types.ObjectId, ref: 'User' }
 });
 
 let Course = mongoose.model('Course', newCourse);

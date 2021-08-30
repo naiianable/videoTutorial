@@ -8,26 +8,36 @@ exports.getHome = async function(req, res) {
     let user = req.cookies.user;
     
     let courses = await Course.find().lean();
-    let topCourses = [];
+    let sortedTop = [];
 
     //sorting for top 3 courses
     let sortedFaveCourses = courses.sort((a,b) => {
         return b.users.length - a.users.length;
     });
+
     //pushing top 3 into array
     for(let i = 0; i < 3; i++) {
-        topCourses.push(sortedFaveCourses[i]);
+        sortedTop.push(sortedFaveCourses[i]);
     }
+
+    let topCourses = sortedTop.filter(temp => temp != undefined);
+    let noTopCourses;
+    if(topCourses.length == 0) {
+        noTopCourses = true;
+    }
+
     //sorting for most recent to least recent
     let sortedCreatedCourses = courses.sort((a,b) => {
         return b.created - a.created;        
     });
 
-    //console.log(sortedCreatedCourses);
-    //  console.log('TOP 3 COURSES', topCourses);
+    console.log('THIS IS COURSES', courses);
+    console.log('THIS IS SORTED TOP', topCourses);
+    console.log('THIS IS SORTED CREATED', sortedCreatedCourses)
+    console.log(noTopCourses)
     
     
-    res.render('home', { sortedCreatedCourses, topCourses, loggedIn, user });
+    res.render('home', { courses, sortedCreatedCourses, topCourses, loggedIn, user });
 };
 
 //<========================================================================>
@@ -44,15 +54,27 @@ exports.getCourseDetails = async function(req, res) {
     let user = req.cookies.user;
     let courseId = req.params.id;
     let courseData = await Course.findById(courseId).lean();
+    console.log('THIS IS COURSE DATA', courseData)
 
     let token = req.cookies.token;
     var decoded = jwt.verify(token, process.env.SECRET);
+
     let userData = await User.findById(decoded.userId);
     let courses = userData.courses;
     let registered = courses.includes(courseId);
+    console.log('THIS IS USER DATA', userData)
 
+
+    let createdBy;
+    if((userData._id).toString() == (courseData.creator).toString()) {
+        createdBy = true;
+    } else {
+        createdBy = false;
+    }
+    console.log((userData._id).toString(), (courseData.creator).toString())
+        //console.log(createdBy)
     res.cookie('course', courseId);
-    res.render('courseDetails', { courseData, loggedIn, user, registered });
+    res.render('courseDetails', { createdBy, courseData, loggedIn, user, registered });
 };
 
 //<========================================================================>
