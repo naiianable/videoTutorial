@@ -40,8 +40,18 @@ exports.getHome = async function(req, res) {
 //<========================================================================>
 
 exports.getCreateCourse = function(req, res) {
+    res.clearCookie('error');
+    let error = req.cookies.error;
     let user = req.cookies.user;
-    res.render('createCourse', { user });
+
+    if(!error) {
+        res.render('createCourse', { user });
+
+    } else {
+        let errorMsg = error.errors[0].msg;
+        res.render('createCourse', { user , errorMsg });
+    }
+    
 };
 
 //<========================================================================>
@@ -88,7 +98,17 @@ exports.getEditCourse = async function(req, res) {
 //<========================================================================>
 
 exports.getRegister = function(req, res) {
-    res.render('register');
+    res.clearCookie('error')
+    let error = req.cookies.error;
+    
+    if(!error) {
+        res.render('register');
+    } else {
+        let errorMsg = error.errors[0].msg;
+        console.log(error);
+        res.render('register', { errorMsg });
+   }
+    
 };
 
 //<========================================================================>

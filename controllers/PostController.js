@@ -2,6 +2,7 @@ const User = require('../Models/User');
 const Course = require('../Models/Course');
 const bcrypt = require('bcrypt');
 var jwt = require('jsonwebtoken');
+const { body, validationResult } = require('express-validator');
 
 exports.postRegister = function(req, res) {
 
@@ -11,19 +12,23 @@ exports.postRegister = function(req, res) {
     const saltRounds = 9;
     const myPlainTextPass = userData.password;
 
+    let errors = validationResult(req)
+    console.log(errors);
 
-    if(myPlainTextPass == userData.repeatPassword) {
-       bcrypt.hash(myPlainTextPass, saltRounds, function(err, hash) {
+    if(!errors.isEmpty()) {
+        console.log(errors);
+        res.cookie('error', errors);
+        res.redirect('register');
+    } else {
+        bcrypt.hash(myPlainTextPass, saltRounds, function(err, hash) {
         newUser.password = hash;
+
         newUser.save((err, user) => {
             if(err) return console.error(err);
         });
-        console.log(newUser);
+        res.redirect('/login');     
     });
-    res.redirect('/login'); 
-    } else {
-        console.log('TRY AGAIN');
-        res.redirect('register');
+        
     }
     
 };
@@ -44,6 +49,7 @@ exports.postLogin = async function(req, res) {
         let userId = userData._id;
         let userName = userData.username;
         let userPass = userData.password;
+        
         if(result) {
             let payload = ({ userId, userPass });
             let secretKey = process.env.SECRET;
@@ -53,7 +59,7 @@ exports.postLogin = async function(req, res) {
 
             res.cookie('token', token, { httpOnly: true, maxAge: 3600 * 1000 });
             res.cookie('loggedIn', true, { maxAge: 3600 * 1000 });
-            res.cookie('user', userName);
+            res.cookie('user', userName, { maxAge: 3600 * 1000 });
 
             res.redirect('/');
         }
@@ -70,19 +76,29 @@ exports.postLogin = async function(req, res) {
 
 exports.postCreateCourse = function(req, res) {
     
-    let newCourseData = req.body;
-    let newCourse = new Course(newCourseData);
-    let token = req.cookies.token;
-    let decoded = jwt.verify(token, process.env.SECRET);
-    
-    newCourse.creator = decoded.userId;
-    newCourse.save((err, course) => {
-        if(err) return console.error(err);
-    });
+    let errors = validationResult(req);
+    console.log(errors);
 
-    console.log(newCourse);
-    console.log(decoded)
-    res.redirect('/');
+    if(!errors.isEmpty()) {
+        res.cookie('error', errors);
+        res.redirect('/course/create');
+    } else {
+        let newCourseData = req.body;
+        let newCourse = new Course(newCourseData);
+        let token = req.cookies.token;
+        let decoded = jwt.verify(token, process.env.SECRET);
+        
+        newCourse.creator = decoded.userId;
+        newCourse.save((err, course) => {
+            if(err) return console.error(err);
+        });
+
+        // console.log(newCourse);
+        // console.log(decoded);
+        res.redirect('/');
+    }
+
+    
 };
 
 
