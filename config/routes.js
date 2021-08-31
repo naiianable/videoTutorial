@@ -2,6 +2,7 @@ const getController = require('../controllers/getController');
 const postController = require('../controllers/postController');
 const logout = require('../controllers/logout');
 const enroll = require('../controllers/enroll');
+const deleteCourse = require('../controllers/deleteCourse');
 
 const clearCookie = require('../middleware/clearCookie');
 const registerValidator = require('../middleware/registerValidator');
@@ -27,6 +28,8 @@ module.exports = (app) => {
     app.get('/logout', logout);
 
     app.get('/enroll', enroll);
+
+    app.get('/delete', deleteCourse);
 
 
     app.post('/register', registerValidator, postController.postRegister);

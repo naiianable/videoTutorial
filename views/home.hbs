@@ -77,11 +77,14 @@
             <h1 class="text-center">Top Courses</h1>
             {{/unless}}
             {{/unless}}
-            <div class="container mt-3">
-                <div class="row ">
+            
+            
+            <div class="container mt-3"> 
+                {{!-- <div class="row "> --}}
                     <div class="card-deck d-flex justify-content-center">
                         {{#if loggedIn}}
-                        {{#each sortedCreatedCourses}}  
+                        {{#each sortedCreatedCourses}} 
+                        
                         <div class="card mb-4">
                             <img class="card-img-top"
                                 src="{{imageUrl}}"
@@ -95,6 +98,7 @@
                                 <small class="float-right">{{created}}</small>                               
                             </div>
                         </div>
+                             
                         {{/each}}
                         {{/if}}     
 
@@ -112,7 +116,7 @@
                         {{/each}}
                         {{/unless}} 
                     </div>          
-                </div>
+                {{!-- </div> --}}
             </div>
             
                         
