@@ -1,6 +1,7 @@
 const Course = require('../Models/Course');
 const User = require('../Models/User');
 const jwt = require('jsonwebtoken');
+const { validationResult } = require('express-validator');
 
 
 exports.getHome = async function(req, res) {
@@ -87,12 +88,26 @@ exports.getCourseDetails = async function(req, res) {
 //<========================================================================>
 
 exports.getEditCourse = async function(req, res) {
+    res.clearCookie('error');
     let loggedIn = req.cookies.loggedIn;
+    let error = req.cookies.error;
+    console.log(error)
+
     let user = req.cookies.user;
     let courseId = req.params.id;
     let courseData = await Course.findById(courseId).lean();
 
-    res.render('editCourse', { courseData, loggedIn, user });
+    if(!error) {
+        res.render('editCourse', { courseData, loggedIn, user });
+    } else {
+        let errorMsg = error.errors[0].msg;
+        res.render('editCourse', { courseData, loggedIn, user, errorMsg });
+    }
+
+    
+    
+
+    
 };
 
 //<========================================================================>
@@ -114,7 +129,15 @@ exports.getRegister = function(req, res) {
 //<========================================================================>
 
 exports.getLogin = function(req, res) {
-    res.render('login');
+    res.clearCookie('error');
+    let error = req.cookies.error;
+    if(!error) {
+       res.render('login'); 
+    } else {
+        let errorMsg = error.errors[0].msg;
+        res.render('login', { errorMsg });
+    }
+    
 };
 
 //<========================================================================>

@@ -5,7 +5,7 @@ const enroll = require('../controllers/enroll');
 
 const clearCookie = require('../middleware/clearCookie');
 const registerValidator = require('../middleware/registerValidator');
-const createCourseValidator = require('../middleware/createCourseValidator');
+const courseValidator = require('../middleware/courseValidator');
 const loginValidator = require('../middleware/loginValidator');
 
 
@@ -31,10 +31,10 @@ module.exports = (app) => {
 
     app.post('/register', registerValidator, postController.postRegister);
 
-    app.post('/login', postController.postLogin);
+    app.post('/login', loginValidator, postController.postLogin);
 
-    app.post('/course/create', createCourseValidator, postController.postCreateCourse);
+    app.post('/course/create', courseValidator, postController.postCreateCourse);
 
-    app.post('/course/edit/:id', postController.postEditCourse);
+    app.post('/course/edit/:id', courseValidator, postController.postEditCourse);
 
 };
