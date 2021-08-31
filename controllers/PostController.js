@@ -40,32 +40,41 @@ exports.postRegister = function(req, res) {
 
 exports.postLogin = async function(req, res) {
 
-    let userInput = req.body;
-    let userData = await User.findOne({ username: userInput.username });
-    let textPass = userInput.password;
-    let hashPass = userData.password;
+    let errors = validationResult(req);
+    console.log(errors);
+    if(!errors.isEmpty()) {
+        res.cookie('error', errors);
+        res.redirect('/login');
+    } else {
+        let userInput = req.body;
+        let userData = await User.findOne({ username: userInput.username });
+        let textPass = userInput.password;
+        let hashPass = userData.password;
 
-    bcrypt.compare(textPass, hashPass).then((result) => {
-        let userId = userData._id;
-        let userName = userData.username;
-        let userPass = userData.password;
-        
-        if(result) {
-            let payload = ({ userId, userPass });
-            let secretKey = process.env.SECRET;
-            let options = { expiresIn: '1hr' };
+        bcrypt.compare(textPass, hashPass).then((result) => {
+            let userId = userData._id;
+            let userName = userData.username;
+            let userPass = userData.password;
 
-            let token = jwt.sign(payload, secretKey, options);
+            if(result) {
+                let payload = ({ userId, userPass });
+                let secretKey = process.env.SECRET;
+                let options = { expiresIn: '1hr' };
 
-            res.cookie('token', token, { httpOnly: true, maxAge: 3600 * 1000 });
-            res.cookie('loggedIn', true, { maxAge: 3600 * 1000 });
-            res.cookie('user', userName, { maxAge: 3600 * 1000 });
+                let token = jwt.sign(payload, secretKey, options);
 
-            res.redirect('/');
-        }
-    }).catch((err) => {
-        console.log(err);
-    });
+                res.cookie('token', token, { httpOnly: true, maxAge: 3600 * 1000 });
+                res.cookie('loggedIn', true, { maxAge: 3600 * 1000 });
+                res.cookie('user', userName, { maxAge: 3600 * 1000 });
+
+                res.redirect('/');
+            }
+        }).catch((err) => {
+            console.log(err);
+        });
+    }
+
+    
     
 };
 
@@ -113,24 +122,41 @@ exports.postEditCourse = async function(req, res) {
     let courseId = req.params.id;
     let courseData = req.body;
 
-    let editThisCourse = await Course.findById(courseId);
-    console.log('ORIGINAL COURSE', editThisCourse);
-    if(courseData.title !== '') {
-        editThisCourse.title = courseData.title;
-    }
-    if(courseData.description !== '') {
-        editThisCourse.description = courseData.description;
-    }
-    if(courseData.imageUrl !== '') {
-        editThisCourse.imageUrl = courseData.imageUrl;
+    let errors = validationResult(req);
+
+    if(!errors.isEmpty()) {
+        res.cookie('error', errors);
+        res.redirect(`/course/edit/${courseId}`);
+        //console.log('THESE ARE ERRORS', errors);
+    } else {
+        let editThisCourse = await Course.findById(courseId);
+
+        // console.log('ORIGINAL COURSE', editThisCourse);
+        if(courseData.title !== '') {
+            editThisCourse.title = courseData.title;
+        }
+        if(courseData.description !== '') {
+            editThisCourse.description = courseData.description;
+        }
+        if(courseData.imageUrl !== '') {
+            editThisCourse.imageUrl = courseData.imageUrl;
+        }
+
+        editThisCourse.save((err, course) => {
+            if(err) return console.error(err);
+        });
+        
+        // console.log('UPDATED COUSE', editThisCourse);
+
+        res.redirect('/');
     }
 
-    editThisCourse.save((err, course) => {
-        if(err) return console.error(err);
-    });
     
-    console.log('UPDATED COUSE', editThisCourse);
-    res.redirect('/');
+
+    
+
+    
+    
 };
 
 
