@@ -9,10 +9,22 @@ exports.getHome = async function(req, res) {
     let user = req.cookies.user;
     
     let courses = await Course.find().lean();
+
+    //array of most popular courses
     let sortedTop = [];
 
+    //array of public courses
+    let isPublic = [];
+    console.log(courses);
+
+    for(let i = 0; i < courses.length; i++) {
+        if(courses[i].isPublic == true) {
+            isPublic.push(courses[i]);
+        }
+    }
+
     //sorting for top 3 courses
-    let sortedFaveCourses = courses.sort((a,b) => {
+    let sortedFaveCourses = isPublic.sort((a,b) => {
         return b.users.length - a.users.length;
     });
 
@@ -21,17 +33,22 @@ exports.getHome = async function(req, res) {
         sortedTop.push(sortedFaveCourses[i]);
     }
 
+    //top 3 courses, if there are less, undefined is removed
     let topCourses = sortedTop.filter(temp => temp != undefined);
     let noTopCourses = topCourses.includes();
     
     //sorting for most recent to least recent
-    let sortedCreatedCourses = courses.sort((a,b) => {
+    let sortedCreatedCourses = isPublic.sort((a,b) => {
         return b.created - a.created;        
     });
+    
 
-    // console.log('THIS IS COURSES', courses);
+
+
+    //console.log('THIS IS COURSES', courses);
     // console.log('THIS IS SORTED TOP', topCourses);
-    // console.log('THIS IS SORTED CREATED', sortedCreatedCourses)
+    //console.log('THIS IS SORTED CREATED', sortedCreatedCourses)
+    //console.log('THIS IS ISPUBLIC', isPublic);
     // console.log(noTopCourses)
     
     
@@ -79,7 +96,7 @@ exports.getCourseDetails = async function(req, res) {
     } else {
         createdBy = false;
     }
-    console.log((userData._id).toString(), (courseData.creator).toString())
+    // console.log((userData._id).toString(), (courseData.creator).toString())
         //console.log(createdBy)
     res.cookie('course', courseId);
     res.render('courseDetails', { createdBy, courseData, loggedIn, user, registered });
