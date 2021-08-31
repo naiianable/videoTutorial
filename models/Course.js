@@ -7,10 +7,12 @@ const User = require('./User');
 let newCourse = new Schema({
     title: {
         type: String,
+        min: 4,
         required: true
     },
     description: {
         type: String,
+        min: 20,
         required: true,
         //max length
     },
