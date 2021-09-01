@@ -163,3 +163,9 @@ exports.postEditCourse = async function(req, res) {
 //<========================================================================>
 
 
+exports.postSearch = function(req, res) {
+
+    console.log(req)
+
+    res.redirect('/');
+};

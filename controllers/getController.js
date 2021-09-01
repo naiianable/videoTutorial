@@ -1,7 +1,6 @@
 const Course = require('../Models/Course');
 const User = require('../Models/User');
 const jwt = require('jsonwebtoken');
-const { validationResult } = require('express-validator');
 
 
 exports.getHome = async function(req, res) {
@@ -15,7 +14,7 @@ exports.getHome = async function(req, res) {
 
     //array of public courses
     let isPublic = [];
-    console.log(courses);
+    // console.log(courses);
 
     for(let i = 0; i < courses.length; i++) {
         if(courses[i].isPublic == true) {
@@ -158,3 +157,8 @@ exports.getLogin = function(req, res) {
 };
 
 //<========================================================================>
+
+exports.getSearch = function(req, res) {
+    console.log('SEARCH')
+    res.redirect('/')
+};
