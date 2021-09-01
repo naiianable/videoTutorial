@@ -3,6 +3,7 @@ const postController = require('../controllers/postController');
 const logout = require('../controllers/logout');
 const enroll = require('../controllers/enroll');
 const deleteCourse = require('../controllers/deleteCourse');
+// const search = require('../controllers/search');
 
 const clearCookie = require('../middleware/clearCookie');
 const registerValidator = require('../middleware/registerValidator');
@@ -31,6 +32,8 @@ module.exports = (app) => {
 
     app.get('/delete', deleteCourse);
 
+    app.get('/search', getController.getSearch);
+
 
     app.post('/register', registerValidator, postController.postRegister);
 
@@ -40,4 +43,5 @@ module.exports = (app) => {
 
     app.post('/course/edit/:id', courseValidator, postController.postEditCourse);
 
+    app.post('/search', postController.postSearch);
 };

@@ -15,7 +15,7 @@
             <a class="navbar-brand">Learning starts now...</a>
 
             <ul class="navbar-nav ml-auto">
-                
+
                 <li class="nav-item">
                     <a class="nav-link" href="/">Home </a>
                 </li>
@@ -50,7 +50,6 @@
 
         <main>
             
-            
             {{#unless loggedIn}}
             <div class="jumbotron jumbotron-fluid">
                 <div class="container">
@@ -64,9 +63,9 @@
             <h1 class="text-center">Courses</h1>
             <section>
                 <a href="/course/create" class="btn btn-warning ">Create Course</a>
-                <form class="search float-right">
+                <form class="search float-right" action="/search" method="POST">
                     <label>Search: </label>
-                    <input type="text">
+                    <input type="text" value="">
                     <input type="submit" class="btn btn-info" value="Search">
                 </form>
             </section>
@@ -80,11 +79,30 @@
             
             
             <div class="container mt-3"> 
-                {{!-- <div class="row "> --}}
-                    <div class="card-deck d-flex justify-content-center">
-                        {{#if loggedIn}}
-                        {{#each sortedCreatedCourses}} 
-                        
+                <div class="card-deck d-flex justify-content-center">
+                    {{#if loggedIn}}
+                    {{#each sortedCreatedCourses}} 
+                    
+                    <div class="card mb-4">
+                        <img class="card-img-top"
+                            src="{{imageUrl}}"
+                            alt="Card image cap" width="400">
+                        <div class="card-body">
+                            <h4 class="card-title">{{title}}</h4>
+                        </div>
+                        <div class="card-footer">
+                            
+                            <a href="/courseDetails/{{_id}}"><button type="button" class="btn btn-info">Details</button></a>  
+                            <small class="float-right">{{created}}</small>                               
+                        </div>
+                    </div>
+                            
+                    {{/each}}
+                    {{/if}}     
+
+
+                    {{#unless loggedIn}}
+                    {{#each topCourses}}           
                         <div class="card mb-4">
                             <img class="card-img-top"
                                 src="{{imageUrl}}"
@@ -92,79 +110,11 @@
                             <div class="card-body">
                                 <h4 class="card-title">{{title}}</h4>
                             </div>
-                            <div class="card-footer">
-                                
-                                <a href="/courseDetails/{{_id}}"><button type="button" class="btn btn-info">Details</button></a>  
-                                <small class="float-right">{{created}}</small>                               
-                            </div>
                         </div>
-                             
-                        {{/each}}
-                        {{/if}}     
-
-
-                        {{#unless loggedIn}}
-                        {{#each topCourses}}           
-                            <div class="card mb-4">
-                                <img class="card-img-top"
-                                    src="{{imageUrl}}"
-                                    alt="Card image cap" width="400">
-                                <div class="card-body">
-                                    <h4 class="card-title">{{title}}</h4>
-                                </div>
-                            </div>
-                        {{/each}}
-                        {{/unless}} 
-                    </div>          
-                {{!-- </div> --}}
+                    {{/each}}
+                    {{/unless}} 
+                </div>          
             </div>
-            
-                        
-            {{!-- <div class="container mt-3">
-                <div class="row ">
-                    <div class="card-deck d-flex justify-content-center">
-                        <div class="card mb-4">
-                            <img class="card-img-top"
-                                src="https://www.countryflags.com/wp-content/uploads/united-states-of-america-flag-png-large.png"
-                                alt="Card image cap" width="400">
-                            <div class="card-body">
-                                <h4 class="card-title">English</h4>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/courseDetails"><button type="button" class="btn btn-info">Details</button></a>
-                                <small class="float-right">Date...</small>
-                            </div>
-                        </div>
-
-                        <div class="card mb-4">
-                            <img class="card-img-top"
-                                src="https://www.countryflags.com/wp-content/uploads/japan-flag-png-large.png"
-                                alt="Card image cap" width="400">
-                            <div class="card-body">
-                                <h4 class="card-title">Japanese</h4>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/courseDetails"><button type="button" class="btn btn-info">Details</button></a>
-                                <small class="float-right">Date...</small>
-                            </div>
-                        </div>
-
-                        <div class="card mb-4">
-                            <img class="card-img-top"
-                                src="https://www.countryflags.com/wp-content/uploads/france-flag-png-large.png"
-                                alt="Card image cap" width="400">
-                            <div class="card-body">
-                                <h4 class="card-title">French</h4>
-                            </div>
-                            <div class="card-footer">
-                                <a href="/courseDetails"><button type="button" class="btn btn-info">Details</button></a>
-                                <small class="float-right">Date...</small>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-
             
             {{#unless courses}}
             <h3 class="text-center">No courses...</h3>
